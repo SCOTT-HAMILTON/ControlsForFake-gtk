@@ -1,0 +1,54 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# scott <sgn.hamilt+gtk@protonmail.com>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-19 19:04+0200\n"
+"PO-Revision-Date: 2020-07-19 19:08+0200\n"
+"Last-Translator: scott <sgn.hamilt+gtk@protonmail.com>\n"
+"Language-Team: French <kde-i18n-doc@kde.org>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.04.1\n"
+
+#: main.cpp:110 main.cpp:259
+msgid "No application available"
+msgstr "Aucune application disponible"
+
+#: main.cpp:156
+msgid "No input device available"
+msgstr "Aucun périphérique d'entrée disponible"
+
+#: main.cpp:202
+msgid "No output device available"
+msgstr "Aucun périphérique de sortie disponible"
+
+#: main-fixed.glade:26
+msgid "Controls For Fake"
+msgstr "Manettes de controle pour Fake"
+
+#: main-fixed.glade:79
+msgid "Play"
+msgstr "Lancer"
+
+#: main-fixed.glade:125
+msgid "Open OGG file..."
+msgstr "Ouvir un fichier OGG..."
+
+#: main-fixed.glade:186
+msgid "Recording applications"
+msgstr "Applications d'enregistrement"
+
+#: main-fixed.glade:199
+msgid "Input devices"
+msgstr "Périphériques d'entrée"
+
+#: main-fixed.glade:212
+msgid "Output devices"
+msgstr "Périphériques de sortie"
