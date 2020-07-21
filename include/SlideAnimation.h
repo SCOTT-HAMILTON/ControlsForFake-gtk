@@ -4,6 +4,7 @@
 #include <glibmm.h>
 #include <gtkmm.h>
 #include <gdkmm.h>
+#include <gdkmm/frameclock.h>
 #include <vector>
 #include <memory>
 
