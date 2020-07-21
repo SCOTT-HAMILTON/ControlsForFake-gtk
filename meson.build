@@ -18,6 +18,8 @@ glade_resources = gnome.compile_resources(
 
 gtkmm_dep = dependency('gtkmm-3.0', version: '>= 3.18')
 
+libpthread_dep = dependency('threads')
+
 libFakeMicWavPlayer_dep = dependency('fakemicwavplayer', required: true)
 
 inc = include_directories('include')
@@ -26,6 +28,6 @@ sources = [ 'main.cpp', 'PulseAudioColumn.cpp', 'SlideAnimation.cpp' ]
 executable('ControlsForFake-gtk', sources,
   glade_resources,
   include_directories: inc,
-  dependencies: [libFakeMicWavPlayer_dep, gtkmm_dep],
+  dependencies: [libFakeMicWavPlayer_dep, gtkmm_dep, libpthread_dep],
   export_dynamic: true,
   install: true)

@@ -3,7 +3,7 @@
 #include <FakeLib.h>
 #include <FakeLibUtils.hpp>
 #include <glib/gi18n.h>
-#include <locale.h>
+#include <clocale>
 
 #include "PulseAudioColumn.h"
 #include "SlideAnimation.h"
@@ -13,29 +13,62 @@
 static std::string oggFile;
 static Glib::RefPtr<Gtk::Builder> builderRef;
 static Gtk::CellRendererText cell;
+static Gtk::Window* windowPtr = nullptr;
 static Gtk::Fixed* canvasPtr = nullptr;
 static Gtk::FileChooserButton* openAudioFileButtonPtr = nullptr;
 static Gtk::ComboBox* sinkInputComboPtr = nullptr;
 static Gtk::MenuButton* switchAudioStreamButtonPtr = nullptr;
+static Gtk::Menu* switchAudioStreamMenuPtr = nullptr;
 static Gtk::Entry* audioFileEntryPtr = nullptr;
 static Gtk::MenuButton* sinkMenuButtonPtr = nullptr;
 static Gtk::Label* sinksMenuButtonLabelPtr = nullptr;
 static Gtk::CellRendererToggle* sinkCellTogglePtr = nullptr;
 static Gtk::TreeViewColumn* sinkToggleColumnPtr = nullptr;
 static Gtk::TreeViewColumn* sinkTextColumnPtr = nullptr;
+static Gtk::Button* runButtonPtr = nullptr;
 static Glib::RefPtr<Gtk::ListStore> sinkStoreRef;
+static Glib::RefPtr<Gtk::ListStore> sinkInputStoreRef;
 static PulseAudioColumn columns;
+
+static SlideAnimation* fileChooserAnimPtr = nullptr;
+static SlideAnimation* fileEntryAnimPtr = nullptr;
+
+static guint sinkInputCount = 0;
 
 void on_fileChooserAnim_update(float newValue) {
 	canvasPtr->move(*openAudioFileButtonPtr, newValue, 18);
 	canvasPtr->move(*sinkInputComboPtr, newValue, 18);
 	canvasPtr->move(*switchAudioStreamButtonPtr, newValue+250, 18);
 }
-
 void on_fileEntryAnim_update(float newValue) {
 	canvasPtr->move(*audioFileEntryPtr, newValue, 18);
 }
+void on_fileChooserAnim_ended() {
+	windowPtr->remove_tick_callback(fileChooserAnimPtr->id());
+}
+void on_fileEntryAnim_ended() {
+	windowPtr->remove_tick_callback(fileEntryAnimPtr->id());
+}
 
+void updateRunButtonSensitiveness() {
+	const auto state = switchAudioStreamMenuPtr->property_active();
+	switch (state) {
+		// Audio File
+		case 0: {
+			runButtonPtr->set_sensitive(
+				audioFileEntryPtr->get_text() != ""
+			);
+			break;
+		}
+		// Application
+		case 1: {
+			runButtonPtr->set_sensitive(
+				sinkInputCount > 0
+			);
+			break;
+		}
+	}
+}
 
 extern "C" {
 void on_openAudioFileButton_file_set(GtkFileChooserButton* button) {
@@ -46,10 +79,17 @@ void on_openAudioFileButton_file_set(GtkFileChooserButton* button) {
 		audioFileEntryPtr->set_text(oggFile.c_str());
 		g_free(selectedFile);
 	}
-	auto anim1 = SlideAnimation::startNewAnimation(330, 570, 1000);
-	auto anim2 = SlideAnimation::startNewAnimation(-550, 30, 1000);
-	/* anim1.signal_update().connect(sigc::ptr_fun(on_fileChooserAnim_update)); */
-	/* anim2.signal_update().connect(sigc::ptr_fun(on_fileEntryAnim_update)); */
+	canvasPtr->move(*audioFileEntryPtr, -550, 18);
+	audioFileEntryPtr->show();
+
+	fileChooserAnimPtr = SlideAnimation::startNewAnimation(330, 570, 1000, windowPtr);
+	fileEntryAnimPtr = SlideAnimation::startNewAnimation(-550, 30, 1000, windowPtr);
+
+	fileChooserAnimPtr->signal_update().connect(sigc::ptr_fun(on_fileChooserAnim_update));
+	fileEntryAnimPtr->signal_update().connect(sigc::ptr_fun(on_fileEntryAnim_update));
+
+	fileChooserAnimPtr->signal_finished().connect(sigc::ptr_fun(on_fileChooserAnim_ended));
+	fileEntryAnimPtr->signal_finished().connect(sigc::ptr_fun(on_fileEntryAnim_ended));
 }
 }
 
@@ -246,35 +286,38 @@ static void updateSinkInputs (Gtk::ComboBox* combo)
 		std::cerr << "[error] Couldn't fetch sink input list, cancelling";
 		return;
 	}
-	auto store = Gtk::ListStore::create(columns);
-	combo->set_model(store);
+	sinkInputStoreRef = Gtk::ListStore::create(columns);
+	combo->set_model(sinkInputStoreRef);
 	cell.property_ellipsize() = Pango::ELLIPSIZE_END;
 	cell.property_ellipsize_set() = true;
 
-	store->clear();
+	sinkInputStoreRef->clear();
 	combo->clear();
 	if (!sink_input_list[0].initialized) {
 		// Nothing in the list
-		auto row = *(store->append());
+		auto row = *(sinkInputStoreRef->append());
 		row[columns.description] = _("No application available");
 		row[columns.index] = -1;
 		combo->set_active(row);
 	}
+	sinkInputCount = 0;
     for (int ctr = 0; ctr < info_list_size; ++ctr) {
 		// We assume that as soon as we hit initialized sink inputs, we've reached the 
 		// end of the initialized sink inputs
         if (!sink_input_list[ctr].initialized) {
                 break;
         }
-		auto row = *(store->append());
+		auto row = *(sinkInputStoreRef->append());
 		row[columns.description] = sink_input_list[ctr].process_binary;
 		row[columns.name] = sink_input_list[ctr].name;
 		row[columns.index] = sink_input_list[ctr].index;
 		row[columns.isChecked] = false;
+		++sinkInputCount;
 		if (ctr == 0)combo->set_active(row);
 	}
 	combo->set_cell_data_func(cell, sigc::ptr_fun(on_cell_data_extra));
 	combo->pack_start(cell, false);
+	updateRunButtonSensitiveness();
 }
 
 static void on_switch_to_audio_file_stream () {
@@ -338,6 +381,7 @@ int main (int argc, char **argv)
 	//Get the GtkBuilder-instantiated Dialog:
 	Gtk::Window* window = nullptr;
 	builder->get_widget("window", window);
+	windowPtr = window;
 
 	builder->get_widget("canvas", canvasPtr);
 	builder->get_widget("openAudioFileButton", openAudioFileButtonPtr);
@@ -352,11 +396,11 @@ int main (int argc, char **argv)
 	  "  <menu id='switchAudioStreamMenu'>"
 	  "    <section>"
 	  "      <item>"
-	  "        <attribute name='label' translatable='yes'>Audio Ogg _File</attribute>"
+	  "        <attribute name='label' translatable='yes'>"+std::string(_("Audio OGG _File"))+"</attribute>"
 	  "        <attribute name='action'>controlsforfake.switchToAudioFileStream</attribute>"
 	  "      </item>"
 	  "      <item>"
-	  "        <attribute name='label' translatable='yes'>_Application</attribute>"
+	  "        <attribute name='label' translatable='yes'>"+std::string(_("_Application"))+"</attribute>"
 	  "        <attribute name='action'>controlsforfake.switchToApplicationStream</attribute>"
 	  "      </item>"
 	  "    </section>"
@@ -366,6 +410,7 @@ int main (int argc, char **argv)
 	auto object = builder->get_object("switchAudioStreamMenu");
 	auto gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(object);
 	auto menu = new Gtk::Menu(gmenu);
+	switchAudioStreamMenuPtr = menu;
 	
 	Gtk::MenuButton* menuButton;
 	builder->get_widget("switchAudioStreamButton", menuButton);
@@ -394,11 +439,17 @@ int main (int argc, char **argv)
 	Gtk::Popover* sinkPopover = nullptr;
 	builder->get_widget("sinkPopover", sinkPopover);
 	sinkMenuButton->set_popover(*sinkPopover);
+
+	builder->get_widget("runButton", runButtonPtr);
+	runButtonPtr->set_sensitive(false);
 	
 	updateSourceOutputs(sourceOutputCombo);
 	updateSources(sourceCombo);
 	updateSinks(sinkTreeView);
 	updateSinkInputs(sinkInputCombo);
+
+	switchAudioStreamMenuPtr->signal_selection_done().connect(sigc::ptr_fun(updateRunButtonSensitiveness));
+	audioFileEntryPtr->property_text().signal_changed().connect(sigc::ptr_fun(updateRunButtonSensitiveness));
 
     gtk_builder_connect_signals(builder->gobj(), NULL);
 

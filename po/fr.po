@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-19 19:04+0200\n"
-"PO-Revision-Date: 2020-07-19 19:08+0200\n"
+"POT-Creation-Date: 2020-07-19 19:20+0200\n"
+"PO-Revision-Date: 2020-07-19 19:23+0200\n"
 "Last-Translator: scott <sgn.hamilt+gtk@protonmail.com>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_FR\n"
@@ -29,6 +29,14 @@ msgstr "Aucun périphérique d'entrée disponible"
 msgid "No output device available"
 msgstr "Aucun périphérique de sortie disponible"
 
+#: main.cpp:355
+msgid "Audio OGG _File"
+msgstr "Fichier Audio OGG"
+
+#: main.cpp:359
+msgid "_Application"
+msgstr "_Application"
+
 #: main-fixed.glade:26
 msgid "Controls For Fake"
 msgstr "Manettes de controle pour Fake"
@@ -39,7 +47,7 @@ msgstr "Lancer"
 
 #: main-fixed.glade:125
 msgid "Open OGG file..."
-msgstr "Ouvir un fichier OGG..."
+msgstr "Ouvrir un fichier OGG..."
 
 #: main-fixed.glade:186
 msgid "Recording applications"
