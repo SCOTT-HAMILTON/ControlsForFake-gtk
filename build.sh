@@ -29,6 +29,7 @@ ninja -C build
 ninja -C build install
 cd ..
 git clone https://github.com/SCOTT-HAMILTON/ControlsForFake-gtk
+cd ControlsForFake-gtk
 mkdir build
 meson build
 ninja -C build
