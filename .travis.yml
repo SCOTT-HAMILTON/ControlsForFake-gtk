@@ -12,6 +12,7 @@ before_install:
 
 script:
   - git clone https://github.com/SCOTT-HAMILTON/ControlsForFake-gtk
+  - docker run ubuntu --name build
   - docker container ls
-  - docker cp ControlsForFake-gtk ubuntu:/ControlsForFake-gtk
+  - docker cp ControlsForFake-gtk build:/ControlsForFake-gtk
   - docker run ubuntu /bin/sh -c "chmod +x ControlsForFake-gtk/build.sh && ./ControlsForFake-gtk/build.sh"
