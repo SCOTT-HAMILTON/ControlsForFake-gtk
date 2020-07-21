@@ -1,0 +1,65 @@
+language: cpp
+
+sudo: required
+dist: bionic
+
+compiler:
+  - gcc-9
+  # - clang-10
+
+os:
+  - linux
+
+addons:
+  apt:
+    update: true
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+      - ninja-build
+      - libgtk-3-dev
+      - libgtkmm-3.0-dev
+      - libpulse-dev
+      - libogg-dev
+      - libvorbis-dev
+      - python3-pip
+      - python3-setuptools
+      - g++-9
+
+matrix:
+  include:
+    - env: CXX=g++-9
+
+install:
+  - sudo python3 -m pip install meson
+  - git clone https://github.com/SCOTT-HAMILTON/FakeLib
+  - cd FakeLib
+  - mkdir build
+  - meson build
+  - ninja -C build
+  - sudo ninja -C build install
+  - cd ..
+  - git clone https://github.com/p-ranav/argparse
+  - cd argparse
+  - mkdir build
+  - cd build
+  - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DARGPARSE_BUILD_TESTS=OFF ..
+  - cd ..
+  - ninja -C build
+  - sudo ninja -C build install
+  - cd ..
+  - git clone https://github.com/SCOTT-HAMILTON/FakeMicWavPlayer
+  - cd FakeMicWavPlayer
+  - mkdir build
+  - meson build
+  - ninja -C build
+  - sudo ninja -C build install
+  - cd ..
+
+script:
+  - ls -lh /usr/include/gtkmm-3.0
+  - ls -lh /usr/include/gtkmm-3.0/gdkmm
+  - mkdir build
+  - meson build
+  - ninja -C build
+
