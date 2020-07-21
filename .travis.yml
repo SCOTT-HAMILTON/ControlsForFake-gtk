@@ -56,6 +56,8 @@ install:
   - cd ..
 
 script:
+  - ls -lh /usr/include/gtkmm-3.0
+  - ls -lh /usr/include/gtkmm-3.0/gdkmm
   - mkdir build
   - meson build
   - ninja -C build
