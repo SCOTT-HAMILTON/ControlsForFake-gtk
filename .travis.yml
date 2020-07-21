@@ -5,7 +5,7 @@ dist: bionic
 
 compiler:
   - gcc-9
-  - clang-10
+  # - clang-10
 
 os:
   - linux
@@ -24,6 +24,10 @@ addons:
       - python3-pip
       - python3-setuptools
       - g++-9
+
+matrix:
+  include:
+    - env: CXX=g++-9
 
 install:
   - sudo python3 -m pip install meson
