@@ -10,7 +10,7 @@ addons:
     - llvm-toolchain-bionic-10
     - ubuntu-toolchain-r-test
     packages:
-    - clang-10
+    - gcc-9
     - cmake
     - ninja-build
     - libstdc++-8-dev
@@ -19,8 +19,9 @@ addons:
 
 matrix:
   include:
-    - env: CXX=clang++-10
+    - env: CXX=g++-9
 before_install:
+# Moving to GCC
   - sudo apt-get -qq update
   - sudo apt-get install libgtkmm-3.0-dev
   - sudo apt-get install libpulse-dev libogg-dev libvorbis-dev python3-pip python3-setuptools
