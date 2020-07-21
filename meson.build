@@ -13,7 +13,7 @@ gnome = import('gnome')
 glade_resources = gnome.compile_resources(
     'glade-resources', 'glade.gresource.xml',
     source_dir: '.',
-    c_name: 'as'
+zsh:1: command not found: q
 )
 
 gtkmm_dep = dependency('gtkmm-3.0', version: '>= 3.18')

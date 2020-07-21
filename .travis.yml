@@ -55,6 +55,6 @@ install:
 
 script:
   - mkdir build
-  - meson build --verbose
+  - meson build
   - ninja -C build
 
