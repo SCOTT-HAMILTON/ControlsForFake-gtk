@@ -1,0 +1,58 @@
+dist: bionic
+group: travis_latest
+
+os: linux
+language: python
+
+addons:
+  apt:
+    sources:
+    - llvm-toolchain-bionic-10
+    - ubuntu-toolchain-r-test
+    packages:
+    - clang-10
+    - cmake
+    - ninja-build
+    - libstdc++-8-dev
+    - 
+    update: true
+
+matrix:
+  include:
+    - env: CXX=clang++-10
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install libgtk-3-dev libgtkmm-3.0-dev
+  - sudo apt-get install libpulse-dev libogg-dev libvorbis-dev python3-pip python3-setuptools
+
+install:
+  - sudo python3 -m pip install meson
+  - git clone https://github.com/SCOTT-HAMILTON/FakeLib
+  - cd FakeLib
+  - mkdir build
+  - meson build
+  - ninja -C build
+  - sudo ninja -C build install
+  - cd ..
+  - git clone https://github.com/p-ranav/argparse
+  - cd argparse
+  - mkdir build
+  - cd build
+  - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DARGPARSE_BUILD_TESTS=OFF ..
+  - cd ..
+  - ninja -C build
+  - sudo ninja -C build install
+  - cd ..
+  - git clone https://github.com/SCOTT-HAMILTON/FakeMicWavPlayer
+  - cd FakeMicWavPlayer
+  - mkdir build
+  - meson build
+  - ninja -C build
+  - sudo ninja -C build install
+  - cd ..
+
+script:
+  - mkdir build
+  - meson build
+  - ninja -C build
+
