@@ -8,7 +8,7 @@ matrix:
     - env: CXX=g++-9
 
 before_install:
-  - docker pull ubuntu:latest
+  - docker pull ubuntu:focal
 # - docker run -d -p 127.0.0.1:80:4567 carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec foreman start;"
 
 script:
