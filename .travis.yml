@@ -13,17 +13,19 @@ os:
 addons:
   apt:
     update: true
+    sources:
+    - ubuntu-toolchain-r-test
     packages:
+      - ninja-build
       - libgtkmm-3.0-dev
       - libpulse-dev
       - libogg-dev
       - libvorbis-dev
-
-before_install:
-  - pyenv global 3.8
-  - pip3 install meson ninja
+      - python3-pip
+      - python3-setuptools
 
 install:
+  - sudo python3 -m pip install meson
   - git clone https://github.com/SCOTT-HAMILTON/FakeLib
   - cd FakeLib
   - mkdir build
