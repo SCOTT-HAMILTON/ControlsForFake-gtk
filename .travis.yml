@@ -24,7 +24,6 @@ before_install:
   - pip3 install meson ninja
 
 install:
-  - sudo python3 -m pip install meson
   - git clone https://github.com/SCOTT-HAMILTON/FakeLib
   - cd FakeLib
   - mkdir build
