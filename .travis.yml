@@ -12,5 +12,5 @@ before_install:
 
 script:
   - chmod +x build.sh
-  - docker run --name build --rm -it ubuntu /bin/bash
+  - docker run --name build --rm -idt ubuntu /bin/bash
   - docker exec build build.sh
