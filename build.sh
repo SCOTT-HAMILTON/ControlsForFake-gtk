@@ -27,7 +27,6 @@ meson build
 ninja -C build
 ninja -C build install
 cd ..
-cd ControlsForFake-gtk
 mkdir build
 meson build
 ninja -C build
