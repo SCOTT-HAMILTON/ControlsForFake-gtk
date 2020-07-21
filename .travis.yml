@@ -13,5 +13,5 @@ before_install:
 script:
   - chmod +x build.sh
   - docker run -d --name build --rm -it ubuntu /bin/bash
-  - docker cp build.sh build:/ControlsForFake-gtk
+  - docker cp build.sh build:/build.sh
   - docker exec build ./build.sh
