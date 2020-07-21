@@ -11,9 +11,6 @@ before_install:
   - docker pull ubuntu:focal
 
 script:
-  - git clone https://github.com/SCOTT-HAMILTON/ControlsForFake-gtk
-  - ls -lh
-  - ls -lh ControlsForFake-gtk
-  - chmod +x ControlsForFake-gtk/build.sh
+  - chmod +x build.sh
   - docker run --name build ubuntu /bin/bash
-  - docker exec build ControlsForFake-gtk/build.sh
+  - docker exec build build.sh
