@@ -1,8 +1,8 @@
 #!/bin/sh
 
-apt update
+apt update -y
 apt install ninja-build libgtk-3-dev libgtkmm-3.0-dev libpulse-dev \
-	libogg-dev libvorbis-dev python3-pip python3-setuptools g++-9
+	libogg-dev libvorbis-dev python3-pip python3-setuptools g++-9 -y
 python3 -m pip install meson
 git clone https://github.com/SCOTT-HAMILTON/FakeLib
 cd FakeLib
