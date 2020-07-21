@@ -15,12 +15,16 @@ addons:
     update: true
     packages:
       - libgtkmm-3.0-dev
+      - libpulse-dev
+      - libogg-dev
+      - libvorbis-dev
 
 before_install:
   - pyenv global 3.8
   - pip3 install meson ninja
 
 install:
+  k sudo python3 -m pip install meson
   - git clone https://github.com/SCOTT-HAMILTON/FakeLib
   - cd FakeLib
   - mkdir build
