@@ -3,7 +3,7 @@
 apt update -y
 DEBIAN_FRONTEND="noninteractive" apt install ninja-build libgtk-3-dev \
 	libgtkmm-3.0-dev libpulse-dev libogg-dev libvorbis-dev python3-pip \
-	python3-setuptools $CXX git cmake pkg-config -y
+	python3-setuptools $COMPILER_PKG git cmake pkg-config -y
 python3 -m pip install meson
 git clone https://github.com/SCOTT-HAMILTON/FakeLib
 cd FakeLib
