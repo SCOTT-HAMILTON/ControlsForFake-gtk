@@ -92,6 +92,11 @@ void on_openAudioFileButton_file_set(GtkFileChooserButton* button) {
 	fileChooserAnimPtr->signal_finished().connect(sigc::ptr_fun(on_fileChooserAnim_ended));
 	fileEntryAnimPtr->signal_finished().connect(sigc::ptr_fun(on_fileEntryAnim_ended));
 }
+void on_runButton_clicked() {
+	std::cerr << "Run Button Pressed\n";
+	std::cerr << "Accel Path of menu : " << switchAudioStreamMenuPtr->get_active()->get_accel_path() << '\n';
+	std::cerr << "Label of menu : " << switchAudioStreamMenuPtr->get_active()->get_label() << '\n';
+}
 }
 
 void on_sink_toggled(const Glib::ustring& path) {
@@ -331,6 +336,7 @@ static void updateSinkInputs (Gtk::ComboBox* combo)
 }
 
 static void on_switch_to_audio_file_stream () {
+	switchAudioStreamMenuPtr->set_active(0);
 	/* std::cerr << "Switching to audio file stream\n"; */
 	Gtk::FileChooserButton* openAudioFileButton;
 	Gtk::ComboBox* sinkInputCombo;
@@ -340,6 +346,7 @@ static void on_switch_to_audio_file_stream () {
 	sinkInputCombo->hide();
 }
 static void on_switch_to_application_stream () {
+	switchAudioStreamMenuPtr->set_active(1);
 	/* std::cerr << "Switching to audio file stream\n"; */
 	Gtk::FileChooserButton* openAudioFileButton;
 	Gtk::ComboBox* sinkInputCombo;
@@ -400,6 +407,8 @@ int main (int argc, char **argv)
 	auto actionGroup = Gio::SimpleActionGroup::create();
 	actionGroup->add_action("switchToAudioFileStream", sigc::ptr_fun(on_switch_to_audio_file_stream));
 	actionGroup->add_action("switchToApplicationStream", sigc::ptr_fun(on_switch_to_application_stream));
+	app->set_accel_for_action("controlsforfake.switchToAudioFileStream", "<Primary>f");
+	app->set_accel_for_action("controlsforfake.switchToApplicationStream", "<Primary>a");
 	window->insert_action_group("controlsforfake", actionGroup);
 	Glib::ustring menu_info =
 	  "<interface>"
@@ -408,10 +417,12 @@ int main (int argc, char **argv)
 	  "      <item>"
 	  "        <attribute name='label' translatable='yes'>"+std::string(_("Audio OGG _File"))+"</attribute>"
 	  "        <attribute name='action'>controlsforfake.switchToAudioFileStream</attribute>"
+	  "        <attribute name='accel'>&lt;Primary&gt;f</attribute>"
 	  "      </item>"
 	  "      <item>"
 	  "        <attribute name='label' translatable='yes'>"+std::string(_("_Application"))+"</attribute>"
 	  "        <attribute name='action'>controlsforfake.switchToApplicationStream</attribute>"
+	  "        <attribute name='accel'>&lt;Primary&gt;a</attribute>"
 	  "      </item>"
 	  "    </section>"
 	  "  </menu>"
@@ -460,6 +471,7 @@ int main (int argc, char **argv)
 
 	switchAudioStreamMenuPtr->signal_selection_done().connect(sigc::ptr_fun(updateRunButtonSensitiveness));
 	audioFileEntryPtr->property_text().signal_changed().connect(sigc::ptr_fun(updateRunButtonSensitiveness));
+	sinkInputComboPtr->property_visible().signal_changed().connect(sigc::ptr_fun(updateRunButtonSensitiveness));
 
     gtk_builder_connect_signals(builder->gobj(), NULL);
 

@@ -1,5 +1,7 @@
 # Controls for Fake Microphone Wav Player
 
+ > If you prefer Qt apps, checkout [ControlsForFake](https://github.com/SCOTT-HAMILTON/ControlsForFake)
+
 ![powered by Pulseaudio](https://www.freedesktop.org/software/pulseaudio/logo.png)
 
 ![Powered by Pulseaudio](icons/powered_by_pulseaudio.png)
@@ -8,7 +10,6 @@
 ![Travis CI Build Status](https://travis-ci.org/SCOTT-HAMILTON/ControlsForFake-gtk.svg?branch=master)
 
 This is the GTK+ GUI frontend for the Fake Microphone Wav Player [https://github.com/SCOTT-HAMILTON/FakeMicWavPlayer](https://github.com/SCOTT-HAMILTON/FakeMicWavPlayer)
-
 
 # Meson Building 
   To build it, run : 
