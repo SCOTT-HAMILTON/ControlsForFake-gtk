@@ -9,6 +9,7 @@
 #include "SlideAnimation.h"
 
 #include <iostream>
+#include <string>
 
 static std::string oggFile;
 static Glib::RefPtr<Gtk::Builder> builderRef;
@@ -94,11 +95,19 @@ void on_openAudioFileButton_file_set(GtkFileChooserButton* button) {
 }
 
 void on_sink_toggled(const Glib::ustring& path) {
-	auto row = *sinkStoreRef->get_iter(path);	
+	auto row = *(sinkStoreRef->get_iter(path));
+
 	row[columns.isChecked] = !row[columns.isChecked];
-	if (row[columns.isChecked]) {
-		sinksMenuButtonLabelPtr->set_text(row[columns.description]);
-	}
+	guint sinkCount = 0;
+	sinkStoreRef->foreach_iter([&sinkCount](const Gtk::TreeModel::iterator& it){
+		if ((*it)[columns.isChecked])
+			++sinkCount;
+		return false;
+	});
+	if (sinkCount == 1)
+		sinksMenuButtonLabelPtr->set_text(std::to_string(sinkCount)+std::string(" ")+_("sink selected"));
+	else
+		sinksMenuButtonLabelPtr->set_text(std::to_string(sinkCount)+std::string(" ")+_("sinks selected"));
 }
 
 void on_cell_data_extra(const Gtk::TreeModel::const_iterator& iter)
@@ -256,6 +265,7 @@ static void updateSinks (Gtk::TreeView* treeView)
 		if (ctr == 0) {
 			sinksMenuButtonLabelPtr->set_text(sink_list[ctr].description);
 			row[columns.isChecked] = true;
+			sinksMenuButtonLabelPtr->set_text(std::string("1 ")+_("sink selected"));
 		}
 	}
 
