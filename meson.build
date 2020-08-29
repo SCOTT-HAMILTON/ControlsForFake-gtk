@@ -1,12 +1,13 @@
 project('ControlsForFake-gtk',
-		'cpp',
+		'vala',
 		'c',
-		license: 'MIT',
-		default_options: ['cpp_std=c++17'])
+		license: 'MIT')
 
 subdir('po')
 
-add_global_arguments('-DGETTEXT_LOCALES_DIR="'+get_option('prefix')+'/'+get_option('localedir')+'"', language : 'cpp')
+vapi_dir = meson.current_source_dir() / 'vapi'
+add_project_arguments(['--vapidir', vapi_dir], language: 'vala')
+add_project_arguments(['-DGETTEXT_PACKAGE="'+meson.project_name()+'"'], language: 'c')
 
 gnome = import('gnome')
 
@@ -16,18 +17,38 @@ glade_resources = gnome.compile_resources(
     c_name: 'as'
 )
 
-gtkmm_dep = dependency('gtkmm-3.0', version: '>= 3.18')
+cc = meson.get_compiler('c')
+dependencies = [
+  dependency('glib-2.0'),
+  dependency('gobject-2.0'),
+  dependency('gtk+-3.0'),
+  dependency('threads'),
+  dependency('cfake'),
+  dependency('gee-0.8'),
+  cc.find_library('m', required : false)
+]
 
-libpthread_dep = dependency('threads')
 
-libFakeMicWavPlayer_dep = dependency('fakemicwavplayer', required: true)
+sources =  [
+  'main.vala',
+  'Application.vala',
+  'Animation.vala',
+  'PulseAudioComboBoxHandler.vala',
+  'SinkComboBoxHandler.vala',
+  'SinkInputComboBoxHandler.vala',
+  'SourceComboBoxHandler.vala',
+  'SourceOutputComboBoxHandler.vala',
+  'SubscribeAndListenThread.vala',
+  'vapi/config.vapi'
+]
 
-inc = include_directories('include')
-sources = [ 'main.cpp', 'PulseAudioColumn.cpp', 'SlideAnimation.cpp' ]
+conf = configuration_data()
+conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
+conf.set_quoted('GETTEXT_LOCALES_DIR', get_option('prefix')+'/'+get_option('localedir'))
+configure_file(output: 'config.h', configuration: conf)
 
 executable('ControlsForFake-gtk', sources,
   glade_resources,
-  include_directories: inc,
-  dependencies: [libFakeMicWavPlayer_dep, gtkmm_dep, libpthread_dep],
+  dependencies: dependencies,
   export_dynamic: true,
   install: true)

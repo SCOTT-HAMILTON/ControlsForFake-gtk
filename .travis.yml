@@ -12,8 +12,8 @@ before_install:
   - docker pull ubuntu:focal
 
 script:
-  - chmod +x build.sh
+  - chmod +x utils/build.sh
   - echo $CXX
   - docker run -d -e "CXX=$CXX" -e "COMPILER_PKG=$COMPILER_PKG" --name build --rm -it ubuntu /bin/bash
-  - docker cp build.sh build:/build.sh
+  - docker cp utils/build.sh build:/build.sh
   - docker exec build ./build.sh

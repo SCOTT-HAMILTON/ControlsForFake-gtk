@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id='switcherMenu'>
+    <section>
+      <item>
+        <attribute name='label' translatable='yes'>Audio OGG _File</attribute>
+        <attribute name='action'>app.switch-to-audio-file-stream</attribute>
+        <attribute name='accel'>&lt;Primary&gt;f</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable='yes'>_Application</attribute>
+        <attribute name='action'>app.switch-to-application-stream</attribute>
+        <attribute name='accel'>&lt;Primary&gt;a</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
