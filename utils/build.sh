@@ -6,7 +6,7 @@ DEBIAN_FRONTEND="noninteractive" apt install ninja-build libgtk-3-dev \
 	python3-setuptools $COMPILER_PKG git cmake pkg-config valac -y
 python3 -m pip install meson
 git clone https://github.com/SCOTT-HAMILTON/CFakeLib
-cd FakeLib
+cd CFakeLib
 mkdir build
 meson build
 ninja -C build
@@ -22,7 +22,7 @@ ninja -C build
 ninja -C build install
 cd ..
 git clone https://github.com/SCOTT-HAMILTON/CFakeMicWavPlayer
-cd FakeMicWavPlayer
+cd CFakeMicWavPlayer
 mkdir build
 meson build
 ninja -C build
