@@ -3,9 +3,9 @@
 apt update -y
 DEBIAN_FRONTEND="noninteractive" apt install ninja-build libgtk-3-dev \
 	libgtkmm-3.0-dev libpulse-dev libogg-dev libvorbis-dev python3-pip \
-	python3-setuptools $COMPILER_PKG git cmake pkg-config -y
+	python3-setuptools $COMPILER_PKG git cmake pkg-config valac -y
 python3 -m pip install meson
-git clone https://github.com/SCOTT-HAMILTON/FakeLib
+git clone https://github.com/SCOTT-HAMILTON/CFakeLib
 cd FakeLib
 mkdir build
 meson build
@@ -21,7 +21,7 @@ cd ..
 ninja -C build
 ninja -C build install
 cd ..
-git clone https://github.com/SCOTT-HAMILTON/FakeMicWavPlayer
+git clone https://github.com/SCOTT-HAMILTON/CFakeMicWavPlayer
 cd FakeMicWavPlayer
 mkdir build
 meson build
