@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/ui">
-    <file preprocess="xml-stripblanks">main-fixed.glade</file>
-    <file preprocess="xml-stripblanks">menus-common.ui</file>
+  <gresource prefix="/">
+	  <file preprocess="xml-stripblanks">ui/main-fixed.glade</file>
+	  <file preprocess="xml-stripblanks">ui/menus-common.ui</file>
   </gresource>
 </gresources>

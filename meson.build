@@ -30,15 +30,15 @@ dependencies = [
 
 
 sources =  [
-  'main.vala',
-  'Application.vala',
-  'Animation.vala',
-  'PulseAudioComboBoxHandler.vala',
-  'SinkComboBoxHandler.vala',
-  'SinkInputComboBoxHandler.vala',
-  'SourceComboBoxHandler.vala',
-  'SourceOutputComboBoxHandler.vala',
-  'SubscribeAndListenThread.vala',
+  'vala/main.vala',
+  'vala/Application.vala',
+  'vala/Animation.vala',
+  'vala/PulseAudioComboBoxHandler.vala',
+  'vala/SinkComboBoxHandler.vala',
+  'vala/SinkInputComboBoxHandler.vala',
+  'vala/SourceComboBoxHandler.vala',
+  'vala/SourceOutputComboBoxHandler.vala',
+  'vala/SubscribeAndListenThread.vala',
   'vapi/config.vapi'
 ]
 
